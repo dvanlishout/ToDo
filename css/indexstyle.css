@@ -1,0 +1,59 @@
+body {
+    background-image: url("../images/backgroundIndex.jpg");
+    font-family: 'Futura', sans-serif;
+}
+
+.listname {
+
+    border: 2px solid white;
+    background: none;
+
+    z-index: 1;
+    font-size: 1.5em;
+    color: white;
+    float: left;
+    border-radius: 0px;
+    margin-left: 30px;
+
+
+}
+
+
+
+#backgroundleft{
+
+
+    float: left;
+    z-index: 0;
+    border-radius: 5px;
+
+}
+
+.addList{
+
+    color: white;
+    margin-bottom: 20px;
+
+
+}
+
+#userInfo{
+    float: left;
+    width: 100px;
+    height:100px;
+    z-index: 2;
+    font-size: 5em;
+    color: white;
+
+}
+
+#logout{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: 2px solid white;
+    font-size: 1.5em;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+}
