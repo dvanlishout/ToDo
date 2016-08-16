@@ -66,38 +66,26 @@ class User
             if($q->canLoginquery($this->m_sUsername, $this->m_sPassword )) {
 
 
+                if ( $_SESSION['admin'] > 0) {
+                    header("location: indexAdmin.php");
 
+                }
+                else {
+                    header("location: index.php");
+
+                }
             }
 
-            else {
 
+            else {
             }
             ;
 
     }
 
-    // LOGIN SESSIONS FUNCTION
-
-
-    // CHECK IF USER IS LOGGED IN
-    public function Authenticate()
-    {
-
-        if (isset($_SESSION['loggedin'])) {
-
-            if ($_SESSION['loggedin'] == "superbrein") {
-                return true;
-            } else {
-                echo "Session is not set correctly";
-            }
-
-        } else {
-            echo "Session is empty";
-        }
-    }
 
     // SIGNUP FUNCTION
-    public function Register()
+    public function Register($admin)
     {
 
         // VERIFICATION: IF FILLED IN
@@ -119,97 +107,24 @@ class User
                 $options = ['cost' => 12];
                 $password = password_hash($this->m_sPassword, PASSWORD_DEFAULT, $options);
                 $q = new query();
-                $q->registerQuery($this->m_sUsername, $password, $this->m_sMailadress);
+                $q->registerQuery($this->m_sUsername, $password, $this->m_sMailadress, $admin);
 
                 $_SESSION['loginfeedback'] = "Welcome aboard!";
-                header("location: index.php");
+                $_SESSION['admin'] = $admin;
+                header("location: login.php");
+
                 return true;
 
             }
         }
     }
 
-
-
-
-
-            // HASH PASSWORD
-
-
-            // BIND VALUES TO QUERY
-
-
-            // CHECK IF USERNAME/EMAIL ALREADY EXISTS
 
 
 
 
 
     /// VALIDATION RULES THE NATION
-
-    public function isName($p_vValue)
-    {
-        if (!empty($p_vValue)) {
-
-            if (preg_match("/^[a-zA-Z '-]*$/", $p_vValue)) {
-                return true;
-            } else {
-                throw new Exception("A name can only contain white spaces and letters!");
-            }
-        } else {
-            throw new Exception("Oops, please fill in your full name");
-        }
-
-    }
-
-
-    public function isUsername($p_vValue)
-    {
-        if (!empty($p_vValue)) {
-            if (strlen($p_vValue) >= 5) {
-                return true;
-            } else {
-                throw new Exception ("Username must be at least 5 characters");
-            }
-
-
-        } else {
-            throw new Exception("Oops, please fill in a username");
-        }
-    }
-
-    public function isEmail($p_vValue)
-    {
-        if (!empty($p_vValue)) {
-            if (preg_match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})^", $p_vValue)) {
-                return true;
-            } else {
-                throw new Exception("Oops, please fill in a valid email adress");
-            }
-        } else {
-            throw new Exception("Oops, please fill in your email adress");
-        }
-    }
-
-    public function isPassword($p_vValue)
-    {
-        if (!empty($p_vValue)) {
-            if (strlen($p_vValue) >= 6) {
-                if (preg_match("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])^", $p_vValue)) {
-                    return true;
-                } else {
-                    throw new Exception("Looks like you're missing a digit, uppercase or lowercase letter in your password");
-                }
-            } else {
-                throw new Exception("Password must be at least 6 characters. Also make sure there is an upper case, lower case and one digit in it!");
-            }
-
-        } else {
-            throw new Exception("Oops, please fill in a password");
-        }
-    }
-
-
 
 
 

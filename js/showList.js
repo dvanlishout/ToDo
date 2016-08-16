@@ -27,3 +27,32 @@ $(document).ready(function () {
 
 
 });
+
+
+function addList(listname){
+    var tekst3 = "";
+    $.ajax
+    ({
+        type: "POST",
+        url: "ajax/addlist.php",
+        data: "listname="+ listname,
+        success: function(data){
+            $.each(data, function(i, field){
+                tekst3 = tekst3 + data[i].taskname;
+                tekst3 = tekst3 + "<br />";
+
+            });
+
+
+            document.getElementById('blok').innerHTML = tekst3;
+
+
+        },
+        error: function(data){
+
+            document.getElementById('blok').innerHTML = "Deze lijstnaam bestaat al, kies een andere";
+
+
+        }
+    })
+}

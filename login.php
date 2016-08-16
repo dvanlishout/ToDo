@@ -27,28 +27,35 @@ if(!empty($_POST)){
 
     if($_POST['action'] === "inloggen") {
 
-        if(!empty($_POST["username"]) && !empty($_POST["password"])){
-            $user = new User();
-            $user->Username = $_POST["username"];
-            $user->Password = $_POST["password"];
+        if(!empty($_POST["username"]) && !empty($_POST["password"])) {
+
+            try {
+                $user = new User();
+                $user->Username = $_POST["username"];
+                $user->Password = $_POST["password"];
 
 
-            if($user->Canlogin()){
+                if ($user->Canlogin()) {
+
+                } else {
+                    $feedback = "Your password or whatever was incorrect";
+                }
+
+            } catch (Exception $e) {
+                $error = $e->getMessage();
 
             }
-
-            else {
-                $feedback = "Your password or whatever was incorrect";
-            }
-
-        }else{
-            // EMPTY FIELDS
-            $feedback = "Please fill in all the fields";
         }
-    } else {
-        header('Location: login.php');
+
+
+        else{
+                $feedback = "Please fill in all the fields";
+            }
     }
+
 }
+
+
 
 
 ?><!DOCTYPE html>

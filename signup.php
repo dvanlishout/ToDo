@@ -22,23 +22,14 @@ if( !empty($_POST) ) {
     if( !empty($_POST["username"]) && !empty($_POST['password'])  && !empty($_POST['mail']) ) {
 
         try {
-
             $user = new User();
             $user->Username = $_POST["username"];
             $user->Password = $_POST["password"];
             $user->Mailadress = $_POST["mail"];
-
-
-
-            $user->Register();
-
-
+            $admin = 0;
+            $user->Register($admin);
 
               } //INSERT USER INTO TABLE
-
-
-
-
 
 
         catch(Exception $e) {
@@ -154,7 +145,7 @@ if( !empty($_POST) ) {
             </p>
         </div>
     <?php endif ?>
-</div>
+
 
 
 
