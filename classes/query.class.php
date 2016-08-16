@@ -20,6 +20,12 @@
             return $user;
         }
 
+        function getCoursename($fk_courseID){
+            $sql = "SELECT coursename FROM course WHERE courseID = '" . $fk_courseID . "'";
+            $result = $this->command($sql);
+            return $result;
+        }
+
         function listnameQuery($listname)
         {
             $sql = "SELECT listname FROM list WHERE listname = '" . $listname . "'";
@@ -44,13 +50,14 @@
         function deleteList($listID)
         {
             $q = new query;
-            $q = $q->getTask($listID);
+            $taskids = $q->getTaskID($listID);
 
-            if(count($q) > 0){
+
+            if(count($taskids) > 0){
+
                 $sql = "DELETE FROM task WHERE fk_listID = '" . $listID . "'";
                 $q = new dbconnect();
                 $q->run($sql);
-
             }
 
             $sql2 = "DELETE FROM list WHERE listID = '" . $listID . "'";
@@ -70,11 +77,26 @@
             return $result;
         }
 
+        function getTaskID($listID)
+        {
+            $sql = "SELECT taskID FROM task WHERE fk_listID = '" . $listID . "'";
+            $result = $this->command($sql);
+            foreach($result as $row) {
+                $q =new query;
+                $q->deleteComment($row["taskID"]);
+            }
+            return $result;
+
+
+
+
+
+
+        }
+
         function updateTask($taskID)
         {
             $status3 = $this->checkStatus($taskID);
-
-
 
 
             $sql = "UPDATE task SET status='".$status3."' WHERE taskID = '" . $taskID . "'";
@@ -152,9 +174,28 @@
 
         function newCommentquery($commentname, $userid, $taskid)
         {
-            $sql = "INSERT INTO comment (comment, fk_userid, fk_taskid) VALUES ('" . $commentname . "', '" . $userid . "', '" . $taskid . "')";
+            $sql = "INSERT INTO comment (commenttext, fk_userid, fk_taskid) VALUES ('" . $commentname . "', '" . $userid . "', '" . $taskid . "')";
             $result = $this->command($sql);
             return $result;
+        }
+
+        function getComment($taskid) {
+            $sql = "SELECT * FROM comment WHERE FK_taskID = '" . $taskid . "' ";
+            $result = $this->command($sql);
+            return $result;
+        }
+
+        function getUsername($userid){
+            $sql = "SELECT username FROM users WHERE userID = '" . $userid . "'";
+            $result = $this->command($sql);
+            return $result;
+
+        }
+
+        function deleteComment($taskid){
+            $sql3 = "DELETE FROM comment WHERE fk_taskID = '" . $taskid . "'";
+            $q = new dbconnect();
+            $q->run($sql3);
         }
 
 

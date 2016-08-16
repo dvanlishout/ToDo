@@ -10,7 +10,7 @@ class Comment
 
         switch ($p_sProperty) {
 
-            case "Comment":
+            case "Commenttext":
                 $this->m_sComment = $p_vValue;
                 break;
         }
@@ -20,7 +20,7 @@ class Comment
     public function __get($p_sProperty)
     {
         switch ($p_sProperty) {
-            case "Comment":
+            case "Commenttext":
                 return $this->m_sComment;
                 break;
 
@@ -29,10 +29,10 @@ class Comment
 
 
 
-    public function addComment($taskid)
+    public function addComment()
     {
         $q = new query();
-        $q->newCommentquery($this->m_sComment, $_SESSION['user_id'], $taskid);
+        $q->newCommentquery($this->m_sComment, $_SESSION['user_id'], $_SESSION['taskid']);
         return true;
 
     }

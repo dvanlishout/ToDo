@@ -38,9 +38,18 @@ class Tasks
     public function addTask()
     {
             $q = new query();
-        $result = $q->newTaskquery($this->m_sTaskname, $_SESSION['listid'], $this->m_iDate);
-            return $this->m_iDate;
+            $result = $q->newTaskquery($this->m_sTaskname, $_SESSION['listid'], $this->m_iDate);
+            return $result;
 
+
+    }
+
+    public function getTime($deadline)
+    {
+        $today = date("Ymd");
+        $countdown = strtotime($deadline) - strtotime($today);
+        $days =$countdown /86400;
+        return $days;
     }
 
 

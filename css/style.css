@@ -14,8 +14,6 @@ body{
 
 
 
-
-
 .logo{
     font-family: 'Futura', sans-serif;
     font-size: 10em;
@@ -35,5 +33,18 @@ label{
     font-size: 5em;
     color: white;
     margin-bottom: 40px;
+
+}
+
+#otherpage {
+
+    border: 2px solid white;
+    font-size: 1.5em;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    text-align: center;
+    margin-top: 25px;
+
 
 }

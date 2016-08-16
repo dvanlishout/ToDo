@@ -3,8 +3,10 @@ session_start();
 	require_once("../classes/query.class.php");
 	$listID = htmlspecialchars($_POST['listID']);
 	$q = new query;
-	$data = $q->deleteList($listID);
-	echo $data;
+    $data = $q->deleteList($listID);
+
+
+
 
 
 

@@ -1,12 +1,11 @@
 <?php
+
 session_start();
 require_once("../classes/query.class.php");
 
-
-
+$courseID = htmlspecialchars($_POST['courseID']);
 $q = new query;
-$data = $q->getList();
-
+$data = $q->getCoursename($courseID);
 
 
 

@@ -1,12 +1,11 @@
 <?php
+
 session_start();
 require_once("../classes/query.class.php");
 
-
-
+$userID = htmlspecialchars($_POST['userID']);
 $q = new query;
-$data = $q->getList();
-
+$data = $q->getUsername($userID);
 
 
 

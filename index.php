@@ -8,12 +8,17 @@ include_once("classes/task.class.php");
 include_once("classes/validation.class.php");
 include_once("classes/list.class.php");
 include_once("classes/course.class.php");
+include_once("classes/comment.class.php");
 
 
 
 if(empty($_SESSION['login_user'])){
     header('location: login.php');
 };
+
+
+
+
 
 
 if(!empty($_POST["listname"] )) {
@@ -41,6 +46,30 @@ if(!empty($_POST["listname"] )) {
 }
 
 
+
+if(!empty($_POST["commentname"] )) {
+    try{
+        $comment = new Comment();
+        $comment->Commenttext = $_POST["commentname"];
+
+
+
+
+        $comment->addComment();
+
+
+
+    }
+
+    catch (Exception $e){
+        $error = $e->getMessage();
+
+    }
+
+
+}
+
+
 if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
 
     try{
@@ -48,7 +77,12 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
         $task->Taskname = $_POST["taskname"];
         $task->Date = $_POST["datepicker"];
 
-        $task->addTask();
+
+       $task->addTask();
+
+
+        header('location: index.php');
+
 
 
     }
@@ -137,7 +171,34 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
             <div class="form-group">
                 <div class="col-sm-4 col-sm-offset-6 ">
                     <input type="hidden" name="action" value="registreer">
-                    <input type="submit" id="btnCreateTask" name="btnCreateTask" value="Taak aanmaken"  class="btn btn-default"/>
+                    <input type="submit" id="btnCreateTask" name="btnCreateTask" value="Taak aanmaken"  class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <?php if(isset($feedback)): ?>
+            <div class="feedback"><?php echo $feedback; ?></div>
+        <?php else: ?>
+
+        <?php endif; ?>
+    </form>
+
+
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form-inline row col-sm-4  commentform">
+        <div class="row">
+            <div class="col-sm-4 ">
+                <input class="form-control" type="text" name="commentname" id="commentnaam" placeholder="Jouw comment" />
+
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-6 ">
+                    <input type="hidden" name="action" value="registreer">
+                    <input type="submit" id="btnCreateTask" name="btnCreateTask" value="Versturen"  class="btn btn-default" />
                 </div>
             </div>
         </div>
@@ -160,7 +221,10 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
 <div class="container">
     <div class="row">
         <div id="lijsten" class="col-sm-4"></div>
-        <div id="taken" class=" row col-sm-4"></div>
+        <div id="taken" class="col-sm-4"></div>
+        <div id="opmerkingen" class="col-sm-4">
+            <p>opmerkingen</p>
+        </div>
     </div>
 </div>
 
@@ -195,13 +259,20 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
     function showList(){
         var tekst= "";
 
+
         $.ajax
         ({
             type: "GET",
             url: "ajax/showlist.php",
             success: function(data){
                 $.each(data, function(i, field){
-                    tekst = tekst + "<a href=\"javascript: showTask('"+data[i].listID+"')\">" + data[i].listname + "</a>"
+                    courseID = data[i].FK_courseID;
+                    coursename = getCourseName(courseID);
+
+
+
+
+                    tekst = tekst + "<a href=\"javascript: showTask('"+data[i].listID+"')\">" + coursename + ' ' + data[i].listname +  "</a>"
                     + "<a href=\"javascript: dList('"+data[i].listID+ "')\">" + "   DELETE" + "</a>";
                     tekst = tekst + "<br />";
                 });
@@ -216,41 +287,73 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
     function showTask(listID){
         var tekst2 = "";
 
+
         $.ajax
         ({
             type: "POST",
             url: "ajax/showtask.php",
             data: "listID="+ listID,
             success: function(data){
-                console.log(data[0]);
+
                 $.each(data, function(i, field){
                     taskID = data[i].taskID;
                     taskname = data[i].taskname;
                     status = data[i].status;
-                    date = [data][i].deadline;
-
+                    deadline = data[i].deadline;
+                    day = deadline.substring(8,10);
+                    month = deadline.substring(5,7);
+                    daycount = getStress(deadline);
 
 
 
 
                     if (status == "1"){
-                        tekst2 = tekst2 + "<a class='strike' id='" + taskID + "' href=\"javascript: getStatus("+data[i].taskID+")\">" + data[i].taskname + "</a><br />";
+                        tekst2 = tekst2 + "<a class='strike task' id='" + taskID + "' href=\"javascript: getStatus("+data[i].taskID+")\">" + data[i].taskname +  ' ' + daycount + " days " + "</a>";
                     }else{
-                        tekst2 = tekst2 + "<a id='" + taskID + "' href=\"javascript: getStatus("+data[i].taskID+")\">" + data[i].taskname + "</a><br />";
+                        tekst2 = tekst2 + "<a class='task' id='" + taskID + "' href=\"javascript: getStatus("+data[i].taskID+")\">" + data[i].taskname + ' ' + daycount + " days" +  "</a>";
                     }
 
-
+                    tekst2 = tekst2 + "<a class='showcomment' id='" + 'showcomment' + taskID + "' href=\"javascript: showComment("+data[i].taskID+")\">" +' comments' + "</a><br />";
 
 
 
 
                 });
 
-                document.getElementById('taken').innerHTML = tekst2;
+
                 $( ".taskform" ).show();
+                document.getElementById('taken').innerHTML = tekst2;
+
 
             }
         })
+    }
+
+    function getCourseName(courseID){
+       var coursename = "";
+
+        $.ajax
+        ({
+            type: "POST",
+            url: "ajax/getCoursename.php",
+            async: false,
+            data: "courseID="+ courseID,
+            success: function(data){
+
+                coursename = data[0].coursename;
+
+
+
+            }
+
+
+        });
+        return coursename;
+
+
+
+
+
     }
 
     function dList(listID){
@@ -263,10 +366,90 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
             success: function(data){
                 showList();
 
+
+
+
+
             }
         })
 
+
+
     }
+
+    function showComment(taskID){
+        var comment = "";
+
+        $.ajax
+        ({
+            type: "POST",
+            url: "ajax/showcomment.php",
+            data: "taskID="+ taskID,
+            success: function(data){
+                $.each(data, function(i, field){
+                    commentvalue = data[i].commenttext;
+                    userid = data[i].FK_userID;
+                    username = getUserName(userid);
+                    commentid = data[i].commentid;
+
+                    comment = comment + "<p>" + username + commentvalue + "</p>";
+
+
+
+                });
+                document.getElementById('opmerkingen').innerHTML = comment;
+                $( ".commentform" ).show();
+                $( "#opmerkingen" ).show();
+            }
+        })
+
+
+    }
+
+    function getUserName(userID){
+        var username = "";
+
+        $.ajax
+        ({
+            type: "POST",
+            url: "ajax/getUsername.php",
+            async: false,
+            data: "userID="+ userID,
+            success: function(data){
+
+                username = data[0].username;
+
+            }
+
+
+        });
+        return username;
+
+    }
+
+    function getStress(deadline){
+        var stress="";
+
+        $.ajax
+        ({
+            type: "POST",
+            url: "ajax/getDeadline.php",
+            async: false,
+            data: "deadline="+ deadline,
+            success: function(data){
+
+                stress = data;
+
+            }
+
+
+        });
+        return stress;
+
+
+
+    }
+
 
 
 

@@ -73,7 +73,10 @@ if(!empty($_POST)){
 <body>
 
     <div id="logoSlogan" class="container">
-        <div class="logo row">To do.</div>
+        <div class="row">
+            <h1 class="logo col-sm-6" >To do.</h1>
+            <a class="col-sm-1 col-sm-offset-5"  id="otherpage" href="signup.php">Sign up</a>
+        </div>
         <div id="whatever"><h1 class="row">Welkom terug.</h1></div>
 
 
