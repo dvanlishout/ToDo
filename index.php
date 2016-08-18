@@ -45,7 +45,7 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
 
     }
     catch (Exception $e){
-        $error2 = $e->getMessage();
+        $error = $e->getMessage();
     }
 
 }
@@ -60,7 +60,7 @@ if(!empty($_POST["commentname"])) {
     }
 
     catch (Exception $e){
-        $error3 = $e->getMessage();
+        $error = $e->getMessage();
     }
 }
 
@@ -96,12 +96,24 @@ if(!empty($_POST["commentname"])) {
     </div>
 </div>
 
+<?php if (isset($error)): ?>
+
+    <div class="text-danger feedback">
+        <p>
+            <?php
+            echo $error;
+            ?>
+        </p>
+    </div>
+    <?php endif ?>
+
 
 <div class="container">
     <div class="leftForm row col-md-3">
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <div class="row">
-                    <input class="form-control" type="text" name="listname" id="listname" placeholder="lijst naam" />
+                    <input class="form-control" type="text" name="listname" id="listname" placeholder="lijst naam" value="<?php if (isset($_POST['listname'])) {
+                        echo htmlspecialchars($_POST['listname']); } ?>" />
             </div>
 
             <div class="row">
@@ -133,7 +145,8 @@ if(!empty($_POST["commentname"])) {
         <div class="row col-md-3 col-md-offset-2">
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <div class="row">
-                        <input class="form-control" type="text" name="taskname" id="taskname" placeholder="Taak naam" />
+                        <input class="form-control" type="text" name="taskname" id="taskname" placeholder="Taak naam" value="<?php if (isset($_POST['taskname'])) {
+                            echo htmlspecialchars($_POST['taskname']); } ?>" />
                         <p>Date: </p> <input type="text" id="taskdate" name="datepicker">
                     </div>
 
@@ -151,7 +164,8 @@ if(!empty($_POST["commentname"])) {
         <div class="row col-md-3 col-md-offset-1">
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <div class="row">
-                    <input class="form-control" type="text" name="commentname" id="commentnaam" placeholder="Jouw comment" />
+                    <input class="form-control" type="text" name="commentname" id="commentname" placeholder="Jouw comment" value="<?php if (isset($_POST['commentname'])) {
+                        echo htmlspecialchars($_POST['commentname']); } ?>" />
                 </div>
 
                 <div class="row">
@@ -168,15 +182,6 @@ if(!empty($_POST["commentname"])) {
 
 
 
-<?php if (isset($error)): ?>
-    <div class="text-danger feedback">
-        <p>
-            <?php
-            echo $error;
-            ?>
-        </p>
-    </div>
-    <?php endif ?>
 
 <div class="container">
     <div class="row">

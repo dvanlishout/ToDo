@@ -89,9 +89,6 @@
 
 
 
-
-
-
         }
 
         function updateTask($taskID)
@@ -168,6 +165,17 @@
 
 
         }
+
+        function getCourse()
+        {
+            $sql = "SELECT * FROM course ";
+            $result = $this->command($sql);
+            return $result;
+        }
+
+
+
+
 
         //COMMENT//
 
@@ -258,9 +266,69 @@
             }
         }
 
+        //course delete//
+        function getListIDZ($courseID)
+        {
+            $sql = "SELECT * FROM list WHERE fk_courseID = '" . $courseID . "'";
+            $result = $this->command($sql);
+            foreach($result as $row) {
+                $q =new query;
+                $q->getTaskIDZ($row["listID"]);
+            }
+            return $result;
+        }
+
+        function getTaskIDZ($listid)
+        {
+            $sql = "SELECT * FROM task WHERE fk_listID = '" . $listid . "'";
+            $result = $this->command($sql);
+            foreach($result as $row) {
+                $q =new query;
+                $q->deleteCommentz($row["taskID"]);
+                $q->deleteTaskz($row["taskID"]);
+            }
+            return $result;
+        }
 
 
+        function deleteCommentz($taskID){
+            $sql = "DELETE FROM comment WHERE fk_taskID = '" . $taskID . "'";
+            $q = new dbconnect();
+            $q->run($sql);
+        }
+
+        function deleteTaskz($taskID){
+            $sql = "DELETE FROM task WHERE taskID = '" . $taskID . "'";
+            $q = new dbconnect();
+            $q->run($sql);
+        }
+
+
+
+        function deleteCourse($courseID)
+        {
+            $q = new query;
+            $result = $q->getListIDZ($courseID);
+            echo 'yello';
+
+            if (count($result) > 0) {
+                $sql = "DELETE FROM list WHERE fk_courseID = '" . $courseID . "'";
+                $q = new dbconnect();
+                $q->run($sql);
+            }
+
+            $sql = "DELETE FROM course WHERE courseID = '" . $courseID . "'";
+            $q = new dbconnect();
+            $q->run($sql);
+        }
     }
+
+
+
+
+
+
+
 
 
 

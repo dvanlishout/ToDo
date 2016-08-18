@@ -3,7 +3,7 @@ session_start();
 require_once("../classes/query.class.php");
 
 $q = new query;
-$data = $q->getList();
+$data = $q->getCourse();
 
 
 header('Content-Type: application/json');

@@ -111,6 +111,65 @@ if(!empty($_POST)) {
     </div>
 <?php endif ?>
 
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6"
+        <div id="vakken">
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function showCourse(){
+        var tekst= "";
+
+
+        $.ajax
+        ({
+            type: "GET",
+            url: "ajax/showcourse.php",
+            success: function(data){
+                $.each(data, function(i, field){
+                    courseID = data[i].courseID;
+                    coursename = data[i].coursename;
+
+
+                    tekst = tekst + coursename
+                        + "<a href=\"javascript: dCourse('"+courseID+ "')\">" + "   X" + "</a>";
+                    tekst = tekst + "<br />";
+                });
+                document.getElementById('vakken').innerHTML = tekst;
+            }
+        })
+    }
+
+    showCourse();
+
+    function dCourse(courseID){
+
+        $.ajax
+        ({
+            type: "POST",
+            url: "ajax/deleteCourse.php",
+            data: "courseID="+ courseID,
+            success: function(data){
+                showCourse();
+                alert(data);
+
+            }
+        });
+
+    }
+
+
+
+
+
+</script>
+
+
 
 </body>
 

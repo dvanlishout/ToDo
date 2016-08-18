@@ -61,31 +61,6 @@ class Validate
 
 
 
-
-
-    public function isImage($type, $error, $width, $height)
-    {
-        $validExtentions = ["jpeg", "jpg", "png"];
-
-        if($error == 0) {
-            if(in_array($type, $validExtentions)) {
-                if($width >= 500 && $height >= 500) {
-                    return true;
-                } else {
-                    throw new Exception("Image must have a minimum height and width of 500px!");
-                }
-            } else {
-                throw new Exception ("Not a valid file! Please upload a jpeg, jpg or png");
-
-            }
-
-
-        } else {
-            throw new Exception("Seems like something went wrong!");
-        }
-    }
-
-
 }
 
 

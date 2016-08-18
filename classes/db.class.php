@@ -1,7 +1,7 @@
 <?php
 class dbconnect{
     var $dbhost = "localhost";
-    var $dbname = "u03_superlab";
+    var $dbname = "todo";
     var $dbuser = "root";
     var $dbpassw = "root";
     var $conn;

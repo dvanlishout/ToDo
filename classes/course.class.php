@@ -61,8 +61,6 @@ class Course
         $result = $q->chooseCourse();
         return $result;
 
-
-
     }
 
 
