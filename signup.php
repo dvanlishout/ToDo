@@ -29,11 +29,12 @@ if( !empty($_POST) ) {
             $admin = 0;
             $user->Register($admin);
 
-              } //INSERT USER INTO TABLE
+              }
 
 
         catch(Exception $e) {
             $error = $e->getMessage();
+
         }
 
         }
@@ -44,7 +45,7 @@ if( !empty($_POST) ) {
 
      else {
 
-        $_SESSION['loginfeedback'] = "Please fill in all the fields.";
+        $feedback = "Please fill in all the fields.";
 
     }
 
@@ -58,8 +59,8 @@ if( !empty($_POST) ) {
     <meta charset="UTF-8">
     <title>ToDo - Plan your life</title>
     <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 
 
 
@@ -68,12 +69,14 @@ if( !empty($_POST) ) {
 
     <div id="logoSlogan" class="container">
         <div class="row">
-            <h1 class="logo col-sm-6">To do.</h1>
-            <a class="col-sm-1 col-sm-offset-5"  id="otherpage" href="login.php">Log in</a>
+            <h1 class="logo col-md-6 col-sm-8 col-xs-9">To do.</h1>
+            <a class="col-md-1 col-md-offset-5 col-sm-2 col-sm-offset-2 col-xs-2"  id="otherpage" href="login.php">Log in</a>
 
         </div>
 
-        <div id="whatever"><h1 class="row">Als je de bomen door het bos niet meer ziet.</h1></div>
+        <div id="row">
+            <h1 class="headline col-md-12">Als je de bomen door het bos niet meer ziet.</h1>
+        </div>
 
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form-horizontal container">
@@ -117,32 +120,20 @@ if( !empty($_POST) ) {
 
 
 
-            <div class="usernameFeedback"><span></span></div>
-            <?php if(isset($_SESSION['loginfeedback'])): ?>
-                <div class="feedback"><?php echo $_SESSION['loginfeedback']; ?></div>
-            <?php else: ?>
-                <!--<div class="feedback">Gelieve alle velden in te vullen</div>-->
-            <?php endif; ?>
+
         </form>
-
-
-
-
-
-
-
     </div>
 
-    <!--Feedback section-->
+
 
     <?php if (isset($feedback)): ?>
-        <div class="feedback">
+        <div class="text-danger">
             <?php echo $feedback; ?>
         </div>
     <?php endif;?>
 
     <?php if (isset($error)): ?>
-        <div class="bg-danger text-danger">
+        <div class="text-danger">
             <p>
                 <?php
                 echo $error;

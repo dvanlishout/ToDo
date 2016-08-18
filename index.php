@@ -20,54 +20,18 @@ if(empty($_SESSION['login_user'])){
 
 
 
-
-if(!empty($_POST["listname"] )) {
-    try{
-        $list = new TodoList();
-        $list->Listname = $_POST["listname"];
-        $courseID = $_POST["coursename"];
-
-        if ($list->addList($courseID)){
-            $feedback = "lijst toegevoegd";
+    if (!empty($_POST["listname"]) && !empty($_POST["coursename"])) {
+        try {
+            $list = new TodoList();
+            $list->Listname = $_POST["listname"];
+            $courseID = $_POST["coursename"];
+            $list->addList($courseID);
+            header("location: index.php");
+        } catch (Exception $e) {
+            $error = $e->getMessage();
         }
-
-        else{
-            $feedback = "lijstnaam is al gekozen";
-        }
-
     }
 
-    catch (Exception $e){
-        $error = $e->getMessage();
-
-    }
-
-
-}
-
-
-
-if(!empty($_POST["commentname"] )) {
-    try{
-        $comment = new Comment();
-        $comment->Commenttext = $_POST["commentname"];
-
-
-
-
-        $comment->addComment();
-
-
-
-    }
-
-    catch (Exception $e){
-        $error = $e->getMessage();
-
-    }
-
-
-}
 
 
 if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
@@ -76,20 +40,28 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
         $task = new Tasks();
         $task->Taskname = $_POST["taskname"];
         $task->Date = $_POST["datepicker"];
-
-
-       $task->addTask();
-
-
+        $task->addTask();
         header('location: index.php');
-
-
 
     }
     catch (Exception $e){
-        $error = $e->getMessage();
+        $error2 = $e->getMessage();
     }
 
+}
+
+
+if(!empty($_POST["commentname"])) {
+    try{
+        $comment = new Comment();
+        $comment->Commenttext = $_POST["commentname"];
+        $comment->addComment();
+        header("location: index.php");
+    }
+
+    catch (Exception $e){
+        $error3 = $e->getMessage();
+    }
 }
 
 
@@ -117,106 +89,94 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
 
 
 
-<div id="userInfo container">
+<div class="container-fluid">
     <div class="row">
-        <h1 class="col-sm-10 "><?php echo $_SESSION['login_user'] ?></h1>
-        <a class="col-sm-1" id="logout" href="logout.php">Log out</a>
+        <h1 class="col-md-9 col-sm-8 col-xs-9 headerHome"><?php echo $_SESSION['login_user'] ?></h1>
+        <a class="col-md-1 col-md-offset-1 col-sm-2  col-xs-2"  id="otherpage" href="logout.php">Log out</a>
     </div>
 </div>
 
 
-<div id="backgroundleft" class="container">
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form-inline row addList col-sm-8">
-        <div class="row form-group">
-            <div class="col-sm-4 ">
-                <input class="form-control" type="text" name="listname" id="listname" placeholder="lijst naam" />
+<div class="container">
+    <div class="leftForm row col-md-3">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+            <div class="row">
+                    <input class="form-control" type="text" name="listname" id="listname" placeholder="lijst naam" />
             </div>
 
-            <div class="col-sm-4 col-sm-offset-3">
-                <input type="hidden" name="action" value="registreer">
-                <input type="submit" id="btnSignup" name="btnSignup" value="Lijst aanmaken"  class="btn btn-default"/>
-            </div>
-         </div>
-
-        <select name="coursename">
-            <?php
-            $course = new Course();
-            $row = $course->listCourse();
-            $i = 0;
-                foreach ($row as $r)
-                {
-                    echo "<option value=".$row[$i]['courseID'].">".$row[$i]['coursename']."</option>";
-                    $i++;
-                }
-                ?>
-        </select>
-
-        <?php if(isset($feedback)): ?>
-            <div class="feedback"><?php echo $feedback; ?></div>
-        <?php else: ?>
-        <?php endif; ?>
-    </form>
-
-
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form-inline row col-sm-4  taskform">
-       <div class="row">
-            <div class="col-sm-4 ">
-                <input class="form-control" type="text" name="taskname" id="taskname" placeholder="Taak naam" />
-                <p>Date: </p> <input type="text" id="taskdate" name="datepicker">
+            <div class="row">
+                    <label for="coursename" class="control-label">Vaknaam</label>
+                    <select name="coursename">
+                        <?php
+                        $course = new Course();
+                        $row = $course->listCourse();
+                        $i = 0;
+                        foreach ($row as $r)
+                        {
+                            echo "<option value=".$row[$i]['courseID'].">".$row[$i]['coursename']."</option>";
+                            $i++;
+                        }
+                        ?>
+                    </select>
             </div>
 
-
-
-
-            <div class="form-group">
-                <div class="col-sm-4 col-sm-offset-6 ">
-                    <input type="hidden" name="action" value="registreer">
-                    <input type="submit" id="btnCreateTask" name="btnCreateTask" value="Taak aanmaken"  class="btn btn-default" />
+            <div class="row">
+                <div class="formknop">
+                    <input type="hidden" name="action" value="lijstAanmaken">
+                    <input type="submit" id="btnSignup" name="btnList" value="Lijst aanmaken"  class="btn btn-default"/>
                 </div>
             </div>
-        </div>
+        </form>
+    </div>
 
+    <div class="taskform">
+        <div class="row col-md-3 col-md-offset-2">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                <div class="row">
+                        <input class="form-control" type="text" name="taskname" id="taskname" placeholder="Taak naam" />
+                        <p>Date: </p> <input type="text" id="taskdate" name="datepicker">
+                    </div>
 
-
-
-        <?php if(isset($feedback)): ?>
-            <div class="feedback"><?php echo $feedback; ?></div>
-        <?php else: ?>
-
-        <?php endif; ?>
-    </form>
-
-
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" class="form-inline row col-sm-4  commentform">
-        <div class="row">
-            <div class="col-sm-4 ">
-                <input class="form-control" type="text" name="commentname" id="commentnaam" placeholder="Jouw comment" />
-
-            </div>
-
-
-            <div class="form-group">
-                <div class="col-sm-4 col-sm-offset-6 ">
-                    <input type="hidden" name="action" value="registreer">
-                    <input type="submit" id="btnCreateTask" name="btnCreateTask" value="Versturen"  class="btn btn-default" />
+                <div class="row">
+                    <div class="formknop">
+                        <input type="hidden" name="action" value="taakAanmaken">
+                        <input type="submit" id="btnCreateTask" name="btnCreateTask" value="Taak aanmaken"  class="btn btn-default" />
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
+    </div>
 
+    <div class="commentform">
+        <div class="row col-md-3 col-md-offset-1">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                <div class="row">
+                    <input class="form-control" type="text" name="commentname" id="commentnaam" placeholder="Jouw comment" />
+                </div>
 
-
-
-        <?php if(isset($feedback)): ?>
-            <div class="feedback"><?php echo $feedback; ?></div>
-        <?php else: ?>
-
-        <?php endif; ?>
-    </form>
-
-
+                <div class="row">
+                    <div class="formknop">
+                        <input type="hidden" name="action" value="registreer">
+                        <input type="submit" id="btnCreateComment" name="btnCreateComment" value="Versturen"  class="btn btn-default" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </div>
 
+
+
+<?php if (isset($error)): ?>
+    <div class="text-danger feedback">
+        <p>
+            <?php
+            echo $error;
+            ?>
+        </p>
+    </div>
+    <?php endif ?>
 
 <div class="container">
     <div class="row">
@@ -231,11 +191,7 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
 
 <script>
     $( function() {
-
         $( "#taskdate" ).datepicker({ dateFormat: 'dd-mm-yy' });
-
-
-
     } );
 
 
@@ -273,7 +229,7 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
 
 
                     tekst = tekst + "<a href=\"javascript: showTask('"+data[i].listID+"')\">" + coursename + ' ' + data[i].listname +  "</a>"
-                    + "<a href=\"javascript: dList('"+data[i].listID+ "')\">" + "   DELETE" + "</a>";
+                    + "<a href=\"javascript: dList('"+data[i].listID+ "')\">" + "   X" + "</a>";
                     tekst = tekst + "<br />";
                 });
                 document.getElementById('lijsten').innerHTML = tekst;
@@ -367,11 +323,13 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
                 showList();
 
 
-
-
-
             }
-        })
+        });
+
+        $( ".taskform" ).hide();
+        $( ".commentform" ).hide();
+        $( "#opmerkingen" ).hide();
+        $( "#taken" ).hide();
 
 
 
@@ -392,7 +350,7 @@ if(!empty($_POST["taskname"])&& !empty($_POST["datepicker"])) {
                     username = getUserName(userid);
                     commentid = data[i].commentid;
 
-                    comment = comment + "<p>" + username + commentvalue + "</p>";
+                    comment = comment + "<p>" + username + ": " +commentvalue + "</p>";
 
 
 

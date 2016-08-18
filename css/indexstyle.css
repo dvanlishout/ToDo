@@ -1,30 +1,20 @@
 body {
-    background-image: url("../images/backgroundIndex.jpg");
     font-family: 'Futura', sans-serif;
 }
 
 .listname {
-
     border: 2px solid white;
     background: none;
-
     z-index: 1;
     font-size: 1.5em;
     color: white;
     float: left;
     border-radius: 0px;
     margin-left: 30px;
-
-
 }
 
 
 
-#backgroundleft{
-
-
-
-}
 
 #userInfo{
 
@@ -34,7 +24,6 @@ body {
 }
 
 #logout{
-
     border: 2px solid white;
     font-size: 1.5em;
     color: white;
@@ -52,17 +41,19 @@ body {
 
 #taken {
     color: white;
-    font-size: 2em;
+    font-size: 1.5em;
     margin-top: 40px;
 
 }
 
 .taskform {
     display: none;
+    margin-top: 40px;
 }
 
 #lijsten a{
     color: white;
+    font-size: 1em;
 }
 
 h1{
@@ -93,11 +84,27 @@ a:hover{
 }
 
 #opmerkingen{
-    background-color: green;
     display: none;
+    color: white;
+    margin-top: 40px;
 }
 
 .commentform{
     display: none;
 }
 
+.headerHome{
+    font-size: 6em;
+}
+
+.leftForm{
+    margin-top: 40px;
+}
+
+.formknop{
+    margin-top: 20px;
+}
+
+.feedback{
+    margin-top: 20px;
+}

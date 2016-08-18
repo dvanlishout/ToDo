@@ -39,14 +39,14 @@ class TodoList
             $q = new query();
             $q->newListquery($this->m_sListname, $_SESSION['user_id'], $courseID );
             return true;
-
         }
 
-        else{
-            $_SESSION['feedback'] = "This listname is already taken!";
-            return false;
+
+        else {
+                throw new Exception("Deze lijstnaam is al in gebruik");
             }
-        }
+    }
+
 
 
 }

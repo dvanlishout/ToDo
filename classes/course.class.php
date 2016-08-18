@@ -12,13 +12,13 @@ class Course
         switch ($p_sProperty) {
 
             case "Coursename":
-                if ($validation->isName($p_vValue)) {
-                    $this->m_sCoursename = $p_vValue;  };
+                    $this->m_sCoursename = $p_vValue;
 
                 break;
 
             case "Teacher":
-                $this->m_sTeacher = $p_vValue;
+                if ($validation->isName($p_vValue)) {
+                $this->m_sTeacher = $p_vValue; };
                 break;
         }
     }
@@ -51,8 +51,8 @@ class Course
         }
 
         else{
-            $_SESSION['feedback'] = "This listname is already taken!";
-            return false;
+            throw new Exception("Dit vak is al aangemaakt");
+
         }
     }
 

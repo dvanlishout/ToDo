@@ -34,12 +34,7 @@ if(!empty($_POST)){
                 $user->Username = $_POST["username"];
                 $user->Password = $_POST["password"];
 
-
-                if ($user->Canlogin()) {
-
-                } else {
-                    $feedback = "Your password or whatever was incorrect";
-                }
+                $user->Canlogin();
 
             } catch (Exception $e) {
                 $error = $e->getMessage();
@@ -72,12 +67,15 @@ if(!empty($_POST)){
 </head>
 <body>
 
-    <div id="logoSlogan" class="container">
-        <div class="row">
-            <h1 class="logo col-sm-6" >To do.</h1>
-            <a class="col-sm-1 col-sm-offset-5"  id="otherpage" href="signup.php">Sign up</a>
-        </div>
-        <div id="whatever"><h1 class="row">Welkom terug.</h1></div>
+<div id="logoSlogan" class="container">
+    <div class="row">
+        <h1 class="logo col-md-6 col-sm-8 col-xs-9">To do.</h1>
+        <a class="col-md-1 col-md-offset-5 col-sm-2 col-sm-offset-2 col-xs-2"  id="otherpage" href="signup.php">Sign up</a>
+    </div>
+
+    <div id="row">
+        <h1 class="headline col-md-12">Welkom terug!</h1>
+    </div>
 
 
         <br class="clearfix">
@@ -110,14 +108,27 @@ if(!empty($_POST)){
                 </div>
 
 
-            <?php if(isset($feedback)): ?>
-                <div class="feedback"><?php echo $feedback; ?></div>
-            <?php else: ?>
-                <!--<div class="feedback">Gelieve alle velden in te vullen</div>-->
-            <?php endif; ?>
+
         </form>
 
 
 </div>
+
+    <?php if (isset($feedback)): ?>
+        <div class="text-danger">
+            <?php echo $feedback; ?>
+        </div>
+    <?php endif;?>
+
+    <?php if (isset($error)): ?>
+        <div class="text-danger">
+            <p>
+                <?php
+                echo $error;
+                ?>
+            </p>
+        </div>
+    <?php endif ?>
+
 </body>
 </html>

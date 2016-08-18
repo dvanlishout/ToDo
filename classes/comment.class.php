@@ -33,7 +33,7 @@ class Comment
     {
         $q = new query();
         $q->newCommentquery($this->m_sComment, $_SESSION['user_id'], $_SESSION['taskid']);
-        return true;
+        return $q;
 
     }
 

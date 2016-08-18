@@ -78,6 +78,7 @@ class User
 
 
             else {
+                throw new Exception("Your username or password is incorrect");
             }
             ;
 
@@ -95,12 +96,14 @@ class User
 
 
             if ($q->UsernameAvailable($this->m_sUsername)) {
-                $_SESSION['loginfeedback'] = "This username is already taken!";
-                echo $this->m_sUsername;
+                throw new Exception("This username is already taken!");
+
+
 
 
             } elseif ($q->MailadressAvailable($this->m_sMailadress)) {
-                $_SESSION['loginfeedback'] = "This e-mailadress is already taken!";
+                throw new Exception("This mailadress is already taken!");
+
 
 
             } else {
@@ -118,20 +121,6 @@ class User
             }
         }
     }
-
-
-
-
-
-
-    /// VALIDATION RULES THE NATION
-
-
-
-    // GET INFO OF USER
-
-
-    // CHANGE USER INFO FUNCTION
 
 }
 
